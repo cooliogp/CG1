@@ -27,31 +27,29 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private JCheckBox specularLighting;
     private JCheckBox ambientLight;
 
-    private JButton removeButton;
-    private JButton addButton;
-    private JButton finishButton;
-    private JButton helpButton;
-    private JButton quitButton;
+    private JButton removeShape;
+    private JButton addShape;
+    private JButton finishGame;
+    private JButton help;
+    private JButton quitGame;
     private JButton newGameButton;
 
-    private JFrame frame;
-    private JLabel label;
-
+    private JFrame okvir;
     private Camera camera;
 
     private TextRenderer textRenderer;
     private TextRenderer textMatch;
 
-    // global variables for the random position of the shapes on the blueprint
-    private int randomFront;
-    private int randomBack;
-    private int randomTop;
-    private int randomTopTwo;
-    private int randomRight;
-    private int randomLeft;
-    private int randomLeftTwo;
-    private int randomBottom;
-    private int randomBottomTwo;
+    // variables for random position of blueprint shapes
+    private int randomF;
+    private int randomB;
+    private int randomT;
+    private int randomT2;
+    private int randomR;
+    private int randomL;
+    private int randomL2;
+    private int randomBot;
+    private int randomBot2;
 
 
     private int nameID = 0; // name ID for picking
@@ -278,10 +276,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private int xCursor, yCursor;
 
     private String[] textureFileNames = {
-            "disney4.jpg",
-            "wood3.png",
-            "mickeyframe.png",
-            "background.jpg"
+            "blue.png"
     };
     private Texture[] textures = new Texture[textureFileNames.length];
 
@@ -290,7 +285,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private int currentAngleOfVisibleField = 55;
 
     private int angleDelta = 5;
-    private float aspect;
     private float aspectP;
     private boolean gameFinished = false;
     private boolean newGame = true;
@@ -332,23 +326,22 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
             animator = new FPSAnimator(canvas, FPS, true);
 
-            frame = new JFrame();
+            okvir = new JFrame();
 
-            removeButton = new JButton("Remove");
-            addButton = new JButton("  Add ");
-            finishButton = new JButton("Finish");
-            quitButton = new JButton("Quit");
-            helpButton = new JButton("Help");
+            removeShape = new JButton("Remove");
+            addShape = new JButton("  Add ");
+            finishGame = new JButton("Finish");
+            quitGame = new JButton("Quit");
+            help = new JButton("Help");
             newGameButton = new JButton("New Game");
 
-            addButton.setPreferredSize(new Dimension(100, 20));
-            removeButton.setPreferredSize(new Dimension(100, 20));
-            finishButton.setPreferredSize(new Dimension(100, 20));
-            helpButton.setPreferredSize(new Dimension(100, 20));
-            quitButton.setPreferredSize(new Dimension(100, 20));
+            addShape.setPreferredSize(new Dimension(100, 20));
+            removeShape.setPreferredSize(new Dimension(100, 20));
+            finishGame.setPreferredSize(new Dimension(100, 20));
+            help.setPreferredSize(new Dimension(100, 20));
+            quitGame.setPreferredSize(new Dimension(100, 20));
             newGameButton.setPreferredSize(new Dimension(100, 20));
 
-            label = new JLabel("Click on the Help button to read game instructions.");
 
             lightOnOff = new JCheckBox("Turn Light ON/OFF", true);
             ambientLighting = new JCheckBox("Ambient Light", false);
@@ -363,17 +356,17 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             front.setLayout(new GridLayout(1, 2));
 
             JPanel row1 = new JPanel();
-            row1.add(addButton);
-            row1.add(removeButton);
+            row1.add(addShape);
+            row1.add(removeShape);
 
             front.add(row1);
 
             JPanel row2 = new JPanel();
 
 
-            row2.add(finishButton);
+            row2.add(finishGame);
             row2.add(newGameButton);
-            row2.add(quitButton);
+            row2.add(quitGame);
             bottom.add(row2);
 
             JPanel row3 = new JPanel();
@@ -382,11 +375,11 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             row3.add(diffuseLighting);
             row3.add(ambientLighting);
             row3.add(specularLighting);
-            row2.add(helpButton);
+            row2.add(help);
             bottom.add(row3);
 
-            frame.add(bottom, BorderLayout.SOUTH);
-            frame.add(front, BorderLayout.NORTH);
+            okvir.add(bottom, BorderLayout.SOUTH);
+            okvir.add(front, BorderLayout.NORTH);
 
             ambientLight.setFocusable(false);
             lightOnOff.setFocusable(false);
@@ -394,8 +387,8 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             diffuseLighting.setFocusable(false);
             specularLighting.setFocusable(false);
 
-            addButton.addActionListener(e -> {
-                if (e.getSource() == addButton) {
+            addShape.addActionListener(e -> {
+                if (e.getSource() == addShape) {
                     if (travers == 1) {
                         left_idn = nameID;
                     } else if (travers == 2) {
@@ -416,11 +409,11 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                         back_idn = nameID;
                     }
                 }
-                addButton.setFocusable(false);
+                addShape.setFocusable(false);
             });
 
-            removeButton.addActionListener(e -> {
-                if (e.getSource() == removeButton) {
+            removeShape.addActionListener(e -> {
+                if (e.getSource() == removeShape) {
 
                     if (travers == 1) {
                         left_idn = nameID;
@@ -442,11 +435,11 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                         back_idn = 0;
                     }
                 }
-                removeButton.setFocusable(false);
+                removeShape.setFocusable(false);
             });
 
-            finishButton.addActionListener(e -> {
-                if (e.getSource() == finishButton) {
+            finishGame.addActionListener(e -> {
+                if (e.getSource() == finishGame) {
                     gameFinished = true;
                     addShapeRed = 0;
                     addShapeGreen = 200 / 255f;
@@ -454,13 +447,13 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                     currentAngleOfVisibleField = 110;
                     translateY = -2;
                 }
-                finishButton.setFocusable(false);
+                finishGame.setFocusable(false);
             });
 
-            helpButton.addActionListener(e -> {
-                if (e.getSource() == helpButton) {
+            help.addActionListener(e -> {
+                if (e.getSource() == help) {
 
-                    JOptionPane.showMessageDialog(frame, "Instructions: \n" +
+                    JOptionPane.showMessageDialog(okvir, "Instructions: \n" +
                                     "W - traverse through the blueprint\n" +
                                     "A - reduce the scale of the shape inserted into the blueprint\n" +
                                     "S - increase the scale of the shape inserted into the blueprint\n" +
@@ -497,16 +490,16 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                                     "9 (Numerical Keypad 9)- negative rotation around the y-axis of the shape inserted into the blueprint\n"
                             , "Help", JOptionPane.INFORMATION_MESSAGE);
                 }
-                helpButton.setFocusable(false);
+                help.setFocusable(false);
             });
 
-            quitButton.addActionListener(e -> {
-                if (e.getSource() == quitButton) {
+            quitGame.addActionListener(e -> {
+                if (e.getSource() == quitGame) {
                     animator.stop();
                     System.exit(0);
 
                 }
-                quitButton.setFocusable(false);
+                quitGame.setFocusable(false);
             });
 
             newGameButton.addActionListener(e -> {
@@ -517,9 +510,9 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                 newGameButton.setFocusable(false);
             });
 
-            frame.getContentPane().add(canvas);
+            okvir.getContentPane().add(canvas);
 
-            frame.addWindowListener(new WindowAdapter() {
+            okvir.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     new Thread(() -> {
@@ -533,9 +526,9 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             camera.lookAt(-5, 0, 3, 0, 0, 0, 0, 1, 0);
             camera.setScale(15);
 
-            frame.setTitle(TITLE);
-            frame.pack();
-            frame.setVisible(true);
+            okvir.setTitle(TITLE);
+            okvir.pack();
+            okvir.setVisible(true);
             animator.start(); // start the animation loop
         });
 
@@ -610,7 +603,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         } else { // normal rendering
             palette(drawable);
             drawBlueprint(drawable);
-            drawBackground(drawable);
+            
         }
 
         camera.apply(gl);
@@ -643,55 +636,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         }
     }
 
-    private void drawBackground(GLAutoDrawable drawable) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glLoadIdentity();
-
-        gl.glViewport(0, 0, windowWidth, windowHeight);
-
-        aspect = (float) windowHeight / ((float) windowWidth);
-
-        gl.glOrtho((float) -10 / 2, (float) 10 / 2,
-                (-10 * aspect) / 2,
-                (10 * aspect) / 2, 0, 100);
-
-        gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glLoadIdentity();
-
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-
-        gl.glPushMatrix();
-        gl.glEnable(GL.GL_TEXTURE_2D);
-        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
-        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
-        gl.glGenerateMipmap(GL.GL_TEXTURE_2D);
-        textures[3].bind(gl);  // Says which texture to use.
-        gl.glTranslated(0, 0, -100);
-        gl.glScalef(1.75f, 1, 1);
-        gl.glColor3f(1f, 1f, 1f);
-
-        double radius = 5;
-        gl.glBegin(GL2.GL_POLYGON);
-        gl.glNormal3f(0, 0, 1);
-
-        gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(-radius, radius);
-        gl.glTexCoord2d(0, 0);
-        gl.glVertex2d(-radius, -radius);
-        gl.glTexCoord2d(1, 0);
-        gl.glVertex2d(radius, -radius);
-        gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(radius, radius);
-        gl.glEnd();
-
-        gl.glDisable(GL.GL_TEXTURE_2D);
-        gl.glEnd();
-        gl.glPopMatrix();
-
-    }
-
     public void newGame() {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
@@ -700,15 +644,15 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         Collections.shuffle(list);
 
-        randomFront = list.get(0);
-        randomBack = list.get(1);
-        randomTop = list.get(2);
-        randomTopTwo = list.get(3);
-        randomRight = list.get(4);
-        randomLeft = list.get(5);
-        randomLeftTwo = list.get(6);
-        randomBottom = list.get(7);
-        randomBottomTwo = list.get(8);
+        randomF = list.get(0);
+        randomB = list.get(1);
+        randomT = list.get(2);
+        randomT2 = list.get(3);
+        randomR = list.get(4);
+        randomL = list.get(5);
+        randomL2 = list.get(6);
+        randomBot = list.get(7);
+        randomBot2 = list.get(8);
 
 
         // default values
@@ -901,9 +845,9 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         float[] projMatrix = new float[16];
         gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
         //x,y=0, width andd height
-        viewport[0] = 0;
+        viewport[0] = (int) (windowWidth / 1.3);
         viewport[1] = 0;
-        viewport[2] = windowWidth / 3;
+        viewport[2] = windowWidth / 4;
         viewport[3] = windowHeight;
         gl.glGetFloatv(GL2.GL_PROJECTION_MATRIX, projMatrix, 0);
         glu.gluPickMatrix((double) xCursor, (double) (viewport[3] - yCursor),
@@ -940,8 +884,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         if (numHits == 0)
             return; // no hits to process
 
-        // storage for the name ID closest to the viewport
-        int selectedNameID = 0; // dummy initial values
         float smallestZ = -1.0f;
         boolean isFirstLoop = true;
         int offset = 0;
@@ -963,7 +905,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                 if (minZ < smallestZ)
                     smallestZ = minZ;
             }
-            float maxZ = getDepth(offset);
             offset++;
 
             for (int j = 0; j < numNames; j++) {
@@ -973,8 +914,9 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
                 if (j == (numNames - 1)) {
 // if the last one (the top element on the stack)
-                    if (smallestZ == minZ) // is this the smallest min z?
-                        selectedNameID = nameID; // then store it's name ID
+                    if (smallestZ == minZ)
+					 {
+					}
                 }
                 offset++;
             }
@@ -1308,7 +1250,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
 
-        gl.glViewport(0, 0, windowWidth / 3, windowHeight);
+        gl.glViewport((int)(windowWidth / 1.3), 0, windowWidth / 4, windowHeight);
 
         aspectP = (float) windowHeight / ((float) windowWidth / 3);
 
@@ -1468,7 +1410,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
     private void drawBlueprint(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
-        gl.glViewport(windowWidth/5 , 0, windowWidth, windowHeight);
+        gl.glViewport(0 , 0, (int) (windowWidth/ 1.2), windowHeight);
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
         glu.gluPerspective(currentAngleOfVisibleField, 1.f * windowWidth / windowHeight, 1, 100);
@@ -1486,7 +1428,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
         textures[0].bind(gl);  // Says which texture to use.
         gl.glEnable(GL.GL_TEXTURE_2D);
-        Shapes.cuboid(gl, 2, true);
+        Shapes.cube(gl, 2, true);
         gl.glDisable(GL.GL_TEXTURE_2D);
 
         drawTop(drawable);
@@ -1548,7 +1490,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
     private void drawLeft(GLAutoDrawable drawable) {
 
-        if (randomLeft == CUBOID) {
+        if (randomL == CUBOID) {
             leftX = -1.5f;
         }
 
@@ -1559,13 +1501,13 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
         gl.glLineWidth(2);
         gl.glScalef(scaleLeftShape, scaleLeftShape, scaleLeftShape);
-        drawShape(drawable, randomLeft);
+        drawShape(drawable, randomL);
         gl.glPopMatrix();
     }
 
     private void drawLeftTwo(GLAutoDrawable drawable) {
 
-        if (randomLeftTwo == CUBOID) {
+        if (randomL2 == CUBOID) {
             leftTwoX = -1.5f;
         }
 
@@ -1576,14 +1518,14 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
         gl.glLineWidth(2);
         gl.glScalef(scaleLeftTwoShape, scaleLeftTwoShape, scaleLeftTwoShape);
-        drawShape(drawable, randomLeftTwo);
+        drawShape(drawable, randomL2);
         gl.glPopMatrix();
     }
 
 
     private void drawRight(GLAutoDrawable drawable) {
 
-        if (randomRight == CUBOID) {
+        if (randomR == CUBOID) {
             rightX = 1.75f;
         }
 
@@ -1596,7 +1538,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glTranslated(rightX, rightY, rightZ);
         gl.glScalef(scaleRightShape, scaleRightShape, scaleRightShape);
 
-        drawShape(drawable, randomRight);
+        drawShape(drawable, randomR);
         gl.glPopMatrix();
     }
 
@@ -1611,7 +1553,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glTranslated(topX, topY, topZ);
         gl.glScalef(scaleTopShape, scaleTopShape, scaleTopShape);
 
-        drawShape(drawable, randomTop);
+        drawShape(drawable, randomT);
         gl.glPopMatrix();
     }
 
@@ -1625,7 +1567,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glTranslated(topTwoX, topTwoY, topTwoZ);
         gl.glScalef(scaleTopTwoShape, scaleTopTwoShape, scaleTopTwoShape);
 
-        drawShape(drawable, randomTopTwo);
+        drawShape(drawable, randomT2);
         gl.glPopMatrix();
     }
 
@@ -1639,7 +1581,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         gl.glTranslated(bottomX, bottomY, bottomZ);
         gl.glScalef(scaleBottomShape, scaleBottomShape, scaleBottomShape);
-        drawShape(drawable, randomBottom);
+        drawShape(drawable, randomBot);
         gl.glPopMatrix();
     }
 
@@ -1653,7 +1595,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         gl.glTranslated(bottomTwoX, bottomTwoY, bottomTwoZ);
         gl.glScalef(scaleBottomTwoShape, scaleBottomTwoShape, scaleBottomTwoShape);
-        drawShape(drawable, randomBottomTwo);
+        drawShape(drawable, randomBot2);
         gl.glPopMatrix();
     }
 
@@ -1667,7 +1609,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glTranslated(frontX, frontY, frontZ);
         gl.glScalef(scaleFrontShape, scaleFrontShape, scaleFrontShape);
 
-        drawShape(drawable, randomFront);
+        drawShape(drawable, randomF);
         gl.glPopMatrix();
     }
 
@@ -1681,14 +1623,13 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glTranslated(backX, backY, backZ);
         gl.glScalef(scaleBackShape, scaleBackShape, scaleBackShape);
 
-        drawShape(drawable, randomBack);
+        drawShape(drawable, randomB);
         gl.glPopMatrix();
     }
 
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        GL2 gl = drawable.getGL().getGL2();
         windowWidth = width;
         windowHeight = height;
     }
@@ -2328,69 +2269,69 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     public void printMatch(GLAutoDrawable drawable) {
 
         if (travers == 1) {
-            if (shape[randomLeft].equals(shape[left_idn]))
-                if (leftScaleCheck(scaleLeft).equals("appropriate") && rotationCheck(randomLeft, angleLeftX, angleLeftY, angleLeftZ).equals("correct")) {
+            if (shape[randomL].equals(shape[left_idn]))
+                if (leftScaleCheck(scaleLeft).equals("appropriate") && rotationCheck(randomL, angleLeftX, angleLeftY, angleLeftZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
         } else if (travers == 2) {
-            if (shape[randomLeftTwo].equals(shape[left_two_idn]))
-                if (leftTwoScaleCheck(scaleLeftTwo).equals("appropriate") && rotationCheck(randomLeftTwo, angleLeftTwoX, angleLeftTwoY, angleLeftTwoZ).equals("correct")) {
+            if (shape[randomL2].equals(shape[left_two_idn]))
+                if (leftTwoScaleCheck(scaleLeftTwo).equals("appropriate") && rotationCheck(randomL2, angleLeftTwoX, angleLeftTwoY, angleLeftTwoZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
         } else if (travers == 3) {
 
-            if (shape[randomRight].equals(shape[right_idn]))
+            if (shape[randomR].equals(shape[right_idn]))
                 if (rightScaleCheck(scaleRight).equals("appropriate")
-                        && rotationCheck(randomRight, angleRightX, angleRightY, angleRightZ).equals("correct")) {
+                        && rotationCheck(randomR, angleRightX, angleRightY, angleRightZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
         } else if (travers == 4) {
-            if (shape[randomTop].equals(shape[top_idn]))
+            if (shape[randomT].equals(shape[top_idn]))
                 if (topScaleCheck(scaleTop).equals("appropriate")
-                        && rotationCheck(randomTop, angleTopX, angleTopY, angleTopZ).equals("correct")) {
+                        && rotationCheck(randomT, angleTopX, angleTopY, angleTopZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
 
         } else if (travers == 5) {
-            if (shape[randomTopTwo].equals(shape[top_two_idn]))
+            if (shape[randomT2].equals(shape[top_two_idn]))
                 if (topTwoScaleCheck(scaleTopTwo).equals("appropriate")
-                        && rotationCheck(randomTopTwo, angleTopTwoX, angleTopTwoY, angleTopTwoZ).equals("correct")) {
+                        && rotationCheck(randomT2, angleTopTwoX, angleTopTwoY, angleTopTwoZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
 
         } else if (travers == 6) {
-            if (shape[randomBottom].equals(shape[bottom_idn]))
+            if (shape[randomBot].equals(shape[bottom_idn]))
                 if (bottomTwoScaleCheck(scaleBottom).equals("appropriate")
-                        && rotationCheck(randomBottom, angleBottomX, angleBottomY, angleBottomZ).equals("correct")) {
+                        && rotationCheck(randomBot, angleBottomX, angleBottomY, angleBottomZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
 
         } else if (travers == 7) {
-            if (shape[randomBottomTwo].equals(shape[bottom_two_idn]))
+            if (shape[randomBot2].equals(shape[bottom_two_idn]))
                 if (bottomTwoScaleCheck(scaleBottomTwo).equals("appropriate")
-                        && rotationCheck(randomBottomTwo, angleBottomTwoX, angleBottomTwoY, angleBottomTwoZ).equals("correct")) {
+                        && rotationCheck(randomBot2, angleBottomTwoX, angleBottomTwoY, angleBottomTwoZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
 
         } else if (travers == 8) {
-            if (shape[randomFront].equals(shape[front_idn]))
+            if (shape[randomF].equals(shape[front_idn]))
                 if (frontScaleCheck(scaleFront).equals("appropriate")
-                        && rotationCheck(randomFront, angleFrontX, angleFrontY, angleFrontZ).equals("correct")) {
+                        && rotationCheck(randomF, angleFrontX, angleFrontY, angleFrontZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
 
         } else if (travers == 9) {
-            if (shape[randomBack].equals(shape[back_idn]))
+            if (shape[randomB].equals(shape[back_idn]))
                 if (backScaleCheck(scaleBack).equals("appropriate")
-                        && rotationCheck(randomBack, angleBackX, angleBackY, angleBackZ).equals("correct")) {
+                        && rotationCheck(randomB, angleBackX, angleBackY, angleBackZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
@@ -2401,83 +2342,83 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         writeText("RESULT: " + matchedShape() + "/9 shape matched correctly", (int) (windowWidth / 3.5f), windowHeight - 40);
 
         writeText("Left One: blueprint shape: " +
-                        shape[randomLeft] +
+                        shape[randomL] +
                         " - matched shape: " +
                         shape[left_idn] + " Scaling: " +
                         leftScaleCheck(scaleLeft) +
-                        " Rotation: " + rotationCheck(randomLeft, angleLeftX, angleLeftY, angleLeftZ),
+                        " Rotation: " + rotationCheck(randomL, angleLeftX, angleLeftY, angleLeftZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 60);
 
         writeText("Left Two: blueprint shape: " +
-                        shape[randomLeftTwo] +
+                        shape[randomL2] +
                         " - matched shape: " +
                         shape[left_two_idn] + " Scaling: " +
                         leftTwoScaleCheck(scaleLeftTwo) +
-                        " Rotation: " + rotationCheck(randomLeftTwo, angleLeftTwoX, angleLeftTwoY, angleLeftTwoZ),
+                        " Rotation: " + rotationCheck(randomL2, angleLeftTwoX, angleLeftTwoY, angleLeftTwoZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 80);
 
         writeText("Right: blueprint shape: " +
-                        shape[randomRight] +
+                        shape[randomR] +
                         " - matched shape: " +
                         shape[right_idn] + " Scaling: " +
                         rightScaleCheck(scaleRight) +
-                        " Rotation: " + rotationCheck(randomRight, angleRightX, angleRightY, angleRightZ),
+                        " Rotation: " + rotationCheck(randomR, angleRightX, angleRightY, angleRightZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 100);
 
         writeText("Top One: blueprint shape: " +
-                        shape[randomTop] +
+                        shape[randomT] +
                         " - matched shape: " +
                         shape[top_idn] + " Scaling: " +
                         topScaleCheck(scaleTop) +
-                        " Rotation: " + rotationCheck(randomTop, angleTopX, angleTopY, angleTopZ),
+                        " Rotation: " + rotationCheck(randomT, angleTopX, angleTopY, angleTopZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 120);
 
         writeText("Top Two: blueprint shape: " +
-                        shape[randomTopTwo] +
+                        shape[randomT2] +
                         " - matched shape: " +
                         shape[top_two_idn] + " Scaling: " +
                         topTwoScaleCheck(scaleTopTwo) +
-                        " Rotation: " + rotationCheck(randomTopTwo, angleTopTwoX, angleTopTwoY, angleTopTwoZ),
+                        " Rotation: " + rotationCheck(randomT2, angleTopTwoX, angleTopTwoY, angleTopTwoZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 140);
 
         writeText("Bottom One: blueprint shape: " +
-                        shape[randomBottom] +
+                        shape[randomBot] +
                         " - matched shape: " +
                         shape[bottom_idn] + " Scaling: " +
                         bottomScaleCheck(scaleBottom) +
-                        " Rotation: " + rotationCheck(randomBottom, angleBottomX, angleBottomY, angleBottomZ),
+                        " Rotation: " + rotationCheck(randomBot, angleBottomX, angleBottomY, angleBottomZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 160);
 
         writeText("Bottom Two: blueprint shape: " +
-                        shape[randomBottomTwo] +
+                        shape[randomBot2] +
                         " - matched shape: " +
                         shape[bottom_two_idn] + " Scaling: " +
                         bottomTwoScaleCheck(scaleBottomTwo) +
-                        " Rotation: " + rotationCheck(randomBottomTwo, angleBottomTwoX, angleBottomTwoY, angleBottomTwoZ),
+                        " Rotation: " + rotationCheck(randomBot2, angleBottomTwoX, angleBottomTwoY, angleBottomTwoZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 180);
 
         writeText("Front: blueprint shape: " +
-                        shape[randomFront] +
+                        shape[randomF] +
                         " - matched shape: " +
                         shape[front_idn] + " Scaling: " +
                         frontScaleCheck(scaleFront) +
-                        " Rotation: " + rotationCheck(randomFront, angleFrontX, angleFrontY, angleFrontZ),
+                        " Rotation: " + rotationCheck(randomF, angleFrontX, angleFrontY, angleFrontZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 200);
 
         writeText("Back: blueprint shape: " +
-                        shape[randomBack] +
+                        shape[randomB] +
                         " - matched shape: " +
                         shape[back_idn] + " Scaling: " +
                         backScaleCheck(scaleBack) +
-                        " Rotation: " + rotationCheck(randomBack, angleBackX, angleBackY, angleBackZ),
+                        " Rotation: " + rotationCheck(randomB, angleBackX, angleBackY, angleBackZ),
                 (int) (windowWidth / 3.5f),
                 windowHeight - 220);
     }
@@ -2486,31 +2427,31 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         int match = 0;
 
-        if (shape[randomLeft].equals(shape[left_idn])) {
+        if (shape[randomL].equals(shape[left_idn])) {
             match++;
         }
-        if (shape[randomLeftTwo].equals(shape[left_two_idn])) {
+        if (shape[randomL2].equals(shape[left_two_idn])) {
             match++;
         }
-        if (shape[randomRight].equals(shape[right_idn])) {
+        if (shape[randomR].equals(shape[right_idn])) {
             match++;
         }
-        if (shape[randomTop].equals(shape[top_idn])) {
+        if (shape[randomT].equals(shape[top_idn])) {
             match++;
         }
-        if (shape[randomTopTwo].equals(shape[top_two_idn])) {
+        if (shape[randomT2].equals(shape[top_two_idn])) {
             match++;
         }
-        if (shape[randomBottom].equals(shape[bottom_idn])) {
+        if (shape[randomBot].equals(shape[bottom_idn])) {
             match++;
         }
-        if (shape[randomBottomTwo].equals(shape[bottom_two_idn])) {
+        if (shape[randomBot2].equals(shape[bottom_two_idn])) {
             match++;
         }
-        if (shape[randomFront].equals(shape[front_idn])) {
+        if (shape[randomF].equals(shape[front_idn])) {
             match++;
         }
-        if (shape[randomBack].equals(shape[back_idn])) {
+        if (shape[randomB].equals(shape[back_idn])) {
             match++;
         }
         return match;
