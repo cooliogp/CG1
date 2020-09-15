@@ -22,10 +22,10 @@ import java.util.Collections;
 public class Exam extends GLCanvas implements GLEventListener, KeyListener, MouseListener {
 
     private JCheckBox lightOnOff;
-    private JCheckBox ambientLighting;
-    private JCheckBox diffuseLighting;
-    private JCheckBox specularLighting;
-    private JCheckBox ambientLight;
+    private JComboBox<String> lightCombobox;
+
+    enum LigthsTypesEnum {AMBIENT_LIGHTING, DIFFUSE_LIGHTING, SPECULAR_LIGHTUNG, AMBIENT_LIGTH};
+    LigthsTypesEnum selectedLighting = LigthsTypesEnum.AMBIENT_LIGHTING;
 
     private JButton removeShape;
     private JButton addShape;
@@ -342,22 +342,51 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             quitGame.setPreferredSize(new Dimension(100, 20));
             newGameButton.setPreferredSize(new Dimension(100, 20));
 
-
+            
             lightOnOff = new JCheckBox("Turn Light ON/OFF", true);
-            ambientLighting = new JCheckBox("Ambient Light", false);
-            specularLighting = new JCheckBox("Specular Light", false);
-            diffuseLighting = new JCheckBox("Diffuse Light", false);
-            ambientLight = new JCheckBox("Global Ambient Light", false);
 
             JPanel bottom = new JPanel();
-            bottom.setLayout(new GridLayout(2, 3));
+            bottom.setLayout(new GridLayout(2, 2));
 
             JPanel front = new JPanel();
             front.setLayout(new GridLayout(1, 2));
+System.out.println(selectedLighting);
+            lightCombobox = new JComboBox<>();
+            lightCombobox.addItem("Ambient Light");
+            lightCombobox.addItem("Specular Light");
+            lightCombobox.addItem("Diffuse Light");
+            lightCombobox.addItem("Global Ambient Light");
+            //LigthsTypesEnum
+
+            // adding lsitener to track which light is chosen selectedLight
+            lightCombobox.addActionListener(e -> {
+            int selectedIndex = lightCombobox.getSelectedIndex();
+            switch(selectedIndex){
+                case 0:
+                    this.selectedLighting = LigthsTypesEnum.AMBIENT_LIGHTING;
+                    break;
+                case 1:
+                    this.selectedLighting = LigthsTypesEnum.SPECULAR_LIGHTUNG;
+                    break;
+                case 2:
+                    this.selectedLighting =LigthsTypesEnum.DIFFUSE_LIGHTING;
+                    break;
+                case 3:
+                    this.selectedLighting = LigthsTypesEnum.AMBIENT_LIGTH;
+                    break;
+            }
+            repaint();
+            //System.out.println("REGISTERD !!!!!" + this.selectedLighting.toString());
+            //System.out.println(this.selectedLighting);
+        });
+
+
 
             JPanel row1 = new JPanel();
             row1.add(addShape);
             row1.add(removeShape);
+            row1.add(lightCombobox);
+            row1.add(lightOnOff);
 
             front.add(row1);
 
@@ -369,23 +398,10 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             row2.add(quitGame);
             bottom.add(row2);
 
-            JPanel row3 = new JPanel();
-            row3.add(ambientLight);
-            row3.add(lightOnOff);
-            row3.add(diffuseLighting);
-            row3.add(ambientLighting);
-            row3.add(specularLighting);
-            row2.add(help);
-            bottom.add(row3);
-
             okvir.add(bottom, BorderLayout.SOUTH);
             okvir.add(front, BorderLayout.NORTH);
 
-            ambientLight.setFocusable(false);
             lightOnOff.setFocusable(false);
-            ambientLighting.setFocusable(false);
-            diffuseLighting.setFocusable(false);
-            specularLighting.setFocusable(false);
 
             addShape.addActionListener(e -> {
                 if (e.getSource() == addShape) {
@@ -611,7 +627,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         float zero[] = {0, 0, 0, 1};
 
-        if (ambientLight.isSelected()) {
+        if (this.selectedLighting == LigthsTypesEnum.AMBIENT_LIGTH) { 
             gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, new float[]{0.1F, 0.1F, 0.1F, 1}, 0);
         } else {
             gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, zero, 0);
@@ -2210,7 +2226,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
 
     private void lights(GL2 gl) {
-        gl.glColor3d(0.5, 0.5, 0.5);
+         gl.glColor3d(0.5, 0.5, 0.5);
         float zero[] = {0, 0, 0, 1};
         gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, zero, 0);
 
@@ -2223,7 +2239,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         float[] diffuse = {1.0f, 1.0f, 1.0f, 1.0f};
         float[] specular = {1.0f, 1.0f, 1.0f, 1.0f};
 
-        if (ambientLighting.isSelected()) {
+        if (this.selectedLighting == LigthsTypesEnum.AMBIENT_LIGHTING) {
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, ambient, 0);
             gl.glEnable(GL2.GL_LIGHT0);
         } else {
@@ -2231,7 +2247,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             gl.glDisable(GL2.GL_LIGHT0);
         }
 
-        if (diffuseLighting.isSelected()) {
+        if (this.selectedLighting == LigthsTypesEnum.DIFFUSE_LIGHTING) {
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, diffuse, 0);
             gl.glEnable(GL2.GL_LIGHT1);
         } else {
@@ -2239,7 +2255,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             gl.glDisable(GL2.GL_LIGHT1);
         }
 
-        if (specularLighting.isSelected()) {
+        if (this.selectedLighting == LigthsTypesEnum.SPECULAR_LIGHTUNG) {
             float[] shiness = {5.0f};
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, specular, 0);
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shiness, 0);
