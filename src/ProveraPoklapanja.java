@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -18,81 +20,65 @@ public class ProveraPoklapanja {
         textRenderer.endRendering();
     }
 	
-	public void writeMatch(String text, int x, int y, TextRenderer textMatch) {
-        textMatch.beginRendering(pr.windowWidth, pr.windowHeight);
-        textMatch.setColor(0.3f, 0.3f, 0.5f, 1);
-        textMatch.draw(text, x, y);
-        textMatch.endRendering();
-    }
-	
-	public void printMatch(GLAutoDrawable drawable, TextRenderer textMatch) {
+	public void printMatch(GLAutoDrawable drawable) {
 
         if (pr.travers == 1) {
             if (Promenljive.shape[pr.randomL].equals(Promenljive.shape[p.left_idn]))
                 if (leftScaleCheck(pr.scaleLeft).equals("appropriate") && rotationCheck(pr.randomL, pr.angleLeftX, pr.angleLeftY, pr.angleLeftZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                    JOptionPane.showMessageDialog(null, "USPEH");
                 }
         } else if (pr.travers == 2) {
             if (Promenljive.shape[pr.randomL2].equals(Promenljive.shape[p.left_two_idn]))
                 if (leftTwoScaleCheck(pr.scaleLeftTwo).equals("appropriate") && rotationCheck(pr.randomL2, pr.angleLeftTwoX, pr.angleLeftTwoY, pr.angleLeftTwoZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                	JOptionPane.showMessageDialog(null, "USPEH");
                 }
         } else if (pr.travers == 3) {
 
             if (Promenljive.shape[pr.randomR].equals(Promenljive.shape[p.right_idn]))
                 if (rightScaleCheck(pr.scaleRight).equals("appropriate")
                         && rotationCheck(pr.randomR, pr.angleRightX, pr.angleRightY, pr.angleRightZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                	JOptionPane.showMessageDialog(null, "USPEH");
                 }
         } else if (pr.travers == 4) {
             if (Promenljive.shape[pr.randomT].equals(Promenljive.shape[p.top_idn]))
                 if (topScaleCheck(pr.scaleTop).equals("appropriate")
                         && rotationCheck(pr.randomT, pr.angleTopX, pr.angleTopY, pr.angleTopZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                	JOptionPane.showMessageDialog(null, "USPEH");
                 }
 
         } else if (pr.travers == 5) {
             if (Promenljive.shape[pr.randomT2].equals(Promenljive.shape[p.top_two_idn]))
                 if (topTwoScaleCheck(pr.scaleTopTwo).equals("appropriate")
                         && rotationCheck(pr.randomT2, pr.angleTopTwoX, pr.angleTopTwoY, pr.angleTopTwoZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                    JOptionPane.showMessageDialog(null, "USPEH");
                 }
 
         } else if (pr.travers == 6) {
             if (Promenljive.shape[pr.randomBot].equals(Promenljive.shape[p.bottom_idn]))
                 if (bottomTwoScaleCheck(pr.scaleBottom).equals("appropriate")
                         && rotationCheck(pr.randomBot, pr.angleBottomX, pr.angleBottomY, pr.angleBottomZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                    JOptionPane.showMessageDialog(null, "USPEH");
                 }
 
         } else if (pr.travers == 7) {
             if (Promenljive.shape[pr.randomBot2].equals(Promenljive.shape[p.bottom_two_idn]))
                 if (bottomTwoScaleCheck(pr.scaleBottomTwo).equals("appropriate")
                         && rotationCheck(pr.randomBot2, pr.angleBottomTwoX, pr.angleBottomTwoY, pr.angleBottomTwoZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                    JOptionPane.showMessageDialog(null, "USPEH");
                 }
 
         } else if (pr.travers == 8) {
             if (Promenljive.shape[pr.randomF].equals(Promenljive.shape[p.front_idn]))
                 if (frontScaleCheck(pr.scaleFront).equals("appropriate")
                         && rotationCheck(pr.randomF, pr.angleFrontX, pr.angleFrontY, pr.angleFrontZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                    JOptionPane.showMessageDialog(null, "USPEH");
                 }
 
         } else if (pr.travers == 9) {
             if (Promenljive.shape[pr.randomB].equals(Promenljive.shape[p.back_idn]))
                 if (backScaleCheck(pr.scaleBack).equals("appropriate")
                         && rotationCheck(pr.randomB, pr.angleBackX, pr.angleBackY, pr.angleBackZ).equals("correct")) {
-                    writeMatch("Well Done! Correct Promenljive.shape, rotation and scaling.",
-                            (int) (pr.windowWidth / 4f), pr.windowHeight - 40, textMatch);
+                    JOptionPane.showMessageDialog(null, "USPEH");
                 }
         }
     }

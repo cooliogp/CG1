@@ -34,7 +34,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private Camera camera;
 
     private TextRenderer textRenderer;
-    private TextRenderer textMatch;
 
     private GLCanvas canvas;
     private FPSAnimator animator;
@@ -352,7 +351,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         pr.textures[0].enable(gl);
 
         textRenderer = new TextRenderer(new Font("SansSerif", Font.PLAIN, 12));
-        textMatch = new TextRenderer(new Font("SansSerif", Font.BOLD, 20));
     }
 
     @Override
@@ -393,7 +391,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         if (!pr.gameFinished) {
 
-            provera.printMatch(drawable, textMatch);
+            provera.printMatch(drawable);
         }
 
 
@@ -919,20 +917,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         }
 
         gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, zero, 0); // Turn off emission color!
-    }
-
-    public void writeText(String tekst, int x, int y) {
-        textRenderer.beginRendering(pr.windowWidth, pr.windowHeight);
-        textRenderer.setColor(0.3f, 0.3f, 0.5f, 1);
-        textRenderer.draw(tekst, x, y);
-        textRenderer.endRendering();
-    }
-
-    public void writeMatch(String text, int x, int y) {
-        textMatch.beginRendering(pr.windowWidth, pr.windowHeight);
-        textMatch.setColor(0.3f, 0.3f, 0.5f, 1);
-        textMatch.draw(text, x, y);
-        textMatch.endRendering();
     }
 
     public static void main(String[] args) {
